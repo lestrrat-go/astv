@@ -92,6 +92,7 @@ func genVisitor() error {
 	for _, typ := range typs {
 		fmt.Fprintf(&buf, "\nh%[1]s %[1]sHandler", typ.Name)
 	}
+	fmt.Fprintf(&buf, "\nhDefault DefaultHandler")
 	fmt.Fprintf(&buf, "\n}")
 
 	fmt.Fprintf(&buf, "\n\nfunc (v *Visitor) Handler(h interface{}) error {")
@@ -100,6 +101,9 @@ func genVisitor() error {
 		fmt.Fprintf(&buf, "\nv.h%s = x", typ.Name)
 		fmt.Fprintf(&buf, "\n}")
 	}
+	fmt.Fprintf(&buf, "\nif x, ok := h.(DefaultHandler); ok {")
+	fmt.Fprintf(&buf, "\nv.hDefault = x")
+	fmt.Fprintf(&buf, "\n}")
 	fmt.Fprintf(&buf, "\nreturn nil")
 	fmt.Fprintf(&buf, "\n}")
 
@@ -111,8 +115,15 @@ func genVisitor() error {
 		fmt.Fprintf(&buf, "\nif ! h.%s(n) {", typ.Name)
 		fmt.Fprintf(&buf, "\nreturn nil")
 		fmt.Fprintf(&buf, "\n}")
+		fmt.Fprintf(&buf, "\nreturn v")
 		fmt.Fprintf(&buf, "\n}")
 	}
+	fmt.Fprintf(&buf, "\n}")
+	// If it got here, there was no appropriate handler. Invoke the default handler, if available
+	fmt.Fprintf(&buf, "\nif h := v.hDefault; h != nil {")
+	fmt.Fprintf(&buf, "\nif !h.Handle(n) {")
+	fmt.Fprintf(&buf, "\nreturn nil")
+	fmt.Fprintf(&buf, "\n}")
 	fmt.Fprintf(&buf, "\n}")
 	fmt.Fprintf(&buf, "\nreturn v")
 	fmt.Fprintf(&buf, "\n}")
@@ -136,6 +147,10 @@ func genHandlers() error {
 		fmt.Fprintf(&buf, "%[1]s(*ast.%[1]s) bool", typ.Name)
 		fmt.Fprintf(&buf, "\n}")
 	}
+
+	fmt.Fprintf(&buf, "\n\ntype DefaultHandler interface {")
+	fmt.Fprintf(&buf, "\nHandle(ast.Node) bool")
+	fmt.Fprintf(&buf, "\n}")
 
 	if err := codegen.WriteFile("handlers_gen.go", &buf, codegen.WithFormatCode(true)); err != nil {
 		if cfe, ok := err.(codegen.CodeFormatError); ok {

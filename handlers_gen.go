@@ -209,3 +209,7 @@ type UnaryExprHandler interface {
 type ValueSpecHandler interface {
 	ValueSpec(*ast.ValueSpec) bool
 }
+
+type DefaultHandler interface {
+	Handle(ast.Node) bool
+}

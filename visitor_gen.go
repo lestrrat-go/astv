@@ -55,6 +55,7 @@ type Visitor struct {
 	hTypeSpec       TypeSpecHandler
 	hUnaryExpr      UnaryExprHandler
 	hValueSpec      ValueSpecHandler
+	hDefault        DefaultHandler
 }
 
 func (v *Visitor) Handler(h interface{}) error {
@@ -214,6 +215,9 @@ func (v *Visitor) Handler(h interface{}) error {
 	if x, ok := h.(ValueSpecHandler); ok {
 		v.hValueSpec = x
 	}
+	if x, ok := h.(DefaultHandler); ok {
+		v.hDefault = x
+	}
 	return nil
 }
 
@@ -224,312 +228,369 @@ func (v *Visitor) Visit(n ast.Node) ast.Visitor {
 			if !h.ArrayType(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.AssignStmt:
 		if h := v.hAssignStmt; h != nil {
 			if !h.AssignStmt(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.BadDecl:
 		if h := v.hBadDecl; h != nil {
 			if !h.BadDecl(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.BadExpr:
 		if h := v.hBadExpr; h != nil {
 			if !h.BadExpr(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.BadStmt:
 		if h := v.hBadStmt; h != nil {
 			if !h.BadStmt(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.BasicLit:
 		if h := v.hBasicLit; h != nil {
 			if !h.BasicLit(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.BinaryExpr:
 		if h := v.hBinaryExpr; h != nil {
 			if !h.BinaryExpr(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.BlockStmt:
 		if h := v.hBlockStmt; h != nil {
 			if !h.BlockStmt(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.BranchStmt:
 		if h := v.hBranchStmt; h != nil {
 			if !h.BranchStmt(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.CallExpr:
 		if h := v.hCallExpr; h != nil {
 			if !h.CallExpr(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.CaseClause:
 		if h := v.hCaseClause; h != nil {
 			if !h.CaseClause(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.ChanType:
 		if h := v.hChanType; h != nil {
 			if !h.ChanType(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.CommClause:
 		if h := v.hCommClause; h != nil {
 			if !h.CommClause(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.Comment:
 		if h := v.hComment; h != nil {
 			if !h.Comment(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.CommentGroup:
 		if h := v.hCommentGroup; h != nil {
 			if !h.CommentGroup(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.CompositeLit:
 		if h := v.hCompositeLit; h != nil {
 			if !h.CompositeLit(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.DeclStmt:
 		if h := v.hDeclStmt; h != nil {
 			if !h.DeclStmt(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.DeferStmt:
 		if h := v.hDeferStmt; h != nil {
 			if !h.DeferStmt(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.Ellipsis:
 		if h := v.hEllipsis; h != nil {
 			if !h.Ellipsis(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.EmptyStmt:
 		if h := v.hEmptyStmt; h != nil {
 			if !h.EmptyStmt(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.ExprStmt:
 		if h := v.hExprStmt; h != nil {
 			if !h.ExprStmt(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.Field:
 		if h := v.hField; h != nil {
 			if !h.Field(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.FieldList:
 		if h := v.hFieldList; h != nil {
 			if !h.FieldList(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.ForStmt:
 		if h := v.hForStmt; h != nil {
 			if !h.ForStmt(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.FuncDecl:
 		if h := v.hFuncDecl; h != nil {
 			if !h.FuncDecl(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.FuncLit:
 		if h := v.hFuncLit; h != nil {
 			if !h.FuncLit(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.FuncType:
 		if h := v.hFuncType; h != nil {
 			if !h.FuncType(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.GenDecl:
 		if h := v.hGenDecl; h != nil {
 			if !h.GenDecl(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.GoStmt:
 		if h := v.hGoStmt; h != nil {
 			if !h.GoStmt(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.Ident:
 		if h := v.hIdent; h != nil {
 			if !h.Ident(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.IfStmt:
 		if h := v.hIfStmt; h != nil {
 			if !h.IfStmt(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.ImportSpec:
 		if h := v.hImportSpec; h != nil {
 			if !h.ImportSpec(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.IncDecStmt:
 		if h := v.hIncDecStmt; h != nil {
 			if !h.IncDecStmt(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.IndexExpr:
 		if h := v.hIndexExpr; h != nil {
 			if !h.IndexExpr(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.InterfaceType:
 		if h := v.hInterfaceType; h != nil {
 			if !h.InterfaceType(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.KeyValueExpr:
 		if h := v.hKeyValueExpr; h != nil {
 			if !h.KeyValueExpr(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.LabeledStmt:
 		if h := v.hLabeledStmt; h != nil {
 			if !h.LabeledStmt(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.MapType:
 		if h := v.hMapType; h != nil {
 			if !h.MapType(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.ParenExpr:
 		if h := v.hParenExpr; h != nil {
 			if !h.ParenExpr(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.RangeStmt:
 		if h := v.hRangeStmt; h != nil {
 			if !h.RangeStmt(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.ReturnStmt:
 		if h := v.hReturnStmt; h != nil {
 			if !h.ReturnStmt(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.SelectStmt:
 		if h := v.hSelectStmt; h != nil {
 			if !h.SelectStmt(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.SelectorExpr:
 		if h := v.hSelectorExpr; h != nil {
 			if !h.SelectorExpr(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.SendStmt:
 		if h := v.hSendStmt; h != nil {
 			if !h.SendStmt(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.SliceExpr:
 		if h := v.hSliceExpr; h != nil {
 			if !h.SliceExpr(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.StarExpr:
 		if h := v.hStarExpr; h != nil {
 			if !h.StarExpr(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.StructType:
 		if h := v.hStructType; h != nil {
 			if !h.StructType(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.SwitchStmt:
 		if h := v.hSwitchStmt; h != nil {
 			if !h.SwitchStmt(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.TypeAssertExpr:
 		if h := v.hTypeAssertExpr; h != nil {
 			if !h.TypeAssertExpr(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.TypeSpec:
 		if h := v.hTypeSpec; h != nil {
 			if !h.TypeSpec(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.UnaryExpr:
 		if h := v.hUnaryExpr; h != nil {
 			if !h.UnaryExpr(n) {
 				return nil
 			}
+			return v
 		}
 	case *ast.ValueSpec:
 		if h := v.hValueSpec; h != nil {
 			if !h.ValueSpec(n) {
 				return nil
 			}
+			return v
+		}
+	}
+	if h := v.hDefault; h != nil {
+		if !h.Handle(n) {
+			return nil
 		}
 	}
 	return v
